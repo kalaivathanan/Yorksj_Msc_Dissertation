@@ -70,6 +70,51 @@ Direct access to ESP32 simulations for each monitoring domain:
     └── datasets/              # Validation datasets
         
 ```
+---
+
+## 📸 Screenshots & Visual Documentation
+
+<details>
+<summary><b>📱 Click to view Device List</b></summary>
+
+![Device List](thingsboard/screenshots/Devices-list.png)
+
+**Configured Devices:**
+- ✅ Dataset Soil Moisture Device
+- ✅ Dataset Fire Detection Device
+- ✅ Dataset Water Quality Device
+- ✅ Soil Moisture Device (Wokwi)
+- ✅ Fire Detection Device (Wokwi)
+- ✅ Water Quality Device (Wokwi)
+
+</details>
+
+<details>
+<summary><b>⚙️ Click to view Rule Chains</b></summary>
+
+![Rule Chains](thingsboard/screenshots/Rule-chains-list.png)
+
+**Active Rule Chains:**
+- Root Rule Chain (main processing)
+- Soil Moisture Rule Chain
+- Fire Detection Rule Chain
+- Water Quality Rule Chain
+- Dataset processing chains
+
+</details>
+
+<details>
+<summary><b>🎛️ Click to view Dashboard</b></summary>
+
+![Dashboard](thingsboard/screenshots/Dashboards_simulation_water_quality_page.png)
+
+**Dashboard Features:**
+- Real-time telemetry for all sensors
+- Alert status indicators
+- Historical data charts
+- Mobile-responsive layout
+
+</details>
 
 ---
 
@@ -421,7 +466,6 @@ This project is developed for academic purposes as part of an MSc Dissertation a
 - Additional documentation: Check `/docs` folder
 
 ### For Researchers
-- Collaboration inquiries: Email contact above
 - Dataset requests: Available upon reasonable request
 - Replication support: Full source code provided in repository
 

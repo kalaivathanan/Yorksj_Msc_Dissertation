@@ -1,0 +1,334 @@
+{
+  "ruleChain": {
+    "name": "Dataset Fire Detection Rule",
+    "type": "CORE",
+    "firstRuleNodeId": null,
+    "root": false,
+    "debugMode": false,
+    "configuration": null,
+    "additionalInfo": {
+      "description": "Dataset Fire Detection Rule Chain"
+    }
+  },
+  "metadata": {
+    "version": 10,
+    "firstNodeIndex": 10,
+    "nodes": [
+      {
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgTimeseriesNode",
+        "name": "Fire Detection Timeseries 2",
+        "debugSettings": {
+          "failuresEnabled": false,
+          "allEnabled": false,
+          "allEnabledUntil": 0
+        },
+        "singletonMode": false,
+        "queueName": null,
+        "configurationVersion": 1,
+        "configuration": {
+          "defaultTTL": 0,
+          "useServerTs": false,
+          "processingSettings": {
+            "type": "ON_EVERY_MESSAGE"
+          }
+        },
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 526,
+          "layoutY": 240
+        }
+      },
+      {
+        "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
+        "name": "Check Early Warning",
+        "debugSettings": null,
+        "singletonMode": false,
+        "queueName": null,
+        "configurationVersion": 0,
+        "configuration": {
+          "scriptLang": "TBEL",
+          "jsScript": "return msg.temperature > 20;",
+          "tbelScript": "return (msg.level1_active && !msg.level2_active&& !msg.level3_active );"
+        },
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 801,
+          "layoutY": 116
+        }
+      },
+      {
+        "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
+        "name": "Check Elevated Risk",
+        "debugSettings": {
+          "failuresEnabled": false,
+          "allEnabled": false,
+          "allEnabledUntil": 0
+        },
+        "singletonMode": false,
+        "queueName": null,
+        "configurationVersion": 0,
+        "configuration": {
+          "scriptLang": "TBEL",
+          "jsScript": "return msg.temperature > 20;",
+          "tbelScript": "return (msg.level1_active && msg.level2_active&& !msg.level3_active );"
+        },
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 799,
+          "layoutY": 253
+        }
+      },
+      {
+        "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
+        "name": "Check Critical Fire",
+        "debugSettings": {
+          "failuresEnabled": false,
+          "allEnabled": false,
+          "allEnabledUntil": 0
+        },
+        "singletonMode": false,
+        "queueName": null,
+        "configurationVersion": 0,
+        "configuration": {
+          "scriptLang": "TBEL",
+          "jsScript": "return msg.temperature > 20;",
+          "tbelScript": "return (msg.level1_active&& msg.level2_active && msg.level3_active);"
+        },
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 800,
+          "layoutY": 389
+        }
+      },
+      {
+        "type": "org.thingsboard.rule.engine.action.TbCreateAlarmNode",
+        "name": "Early Warning Fire Alarm",
+        "debugSettings": null,
+        "singletonMode": false,
+        "queueName": null,
+        "configurationVersion": 0,
+        "configuration": {
+          "scriptLang": "TBEL",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n    //remove prevAlarmDetails from metadata\n    delete metadata.prevAlarmDetails;\n    //now metadata is the same as it comes IN this rule node\n}\n\n\nreturn details;",
+          "alarmDetailsBuildTbel": "var details = {};\nif (metadata.prevAlarmDetails != null) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n    //remove prevAlarmDetails from metadata\n    metadata.remove('prevAlarmDetails');\n    //now metadata is the same as it comes IN this rule node\n}\n\n\nreturn details;",
+          "useMessageAlarmData": false,
+          "overwriteAlarmDetails": false,
+          "alarmType": "Early Warning Fire Alarm",
+          "severity": "WARNING",
+          "propagate": false,
+          "relationTypes": [],
+          "propagateToOwner": false,
+          "propagateToTenant": false,
+          "dynamicSeverity": false
+        },
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 1146,
+          "layoutY": 65
+        }
+      },
+      {
+        "type": "org.thingsboard.rule.engine.action.TbClearAlarmNode",
+        "name": "Clear Early Warning Fire Alarm",
+        "debugSettings": null,
+        "singletonMode": false,
+        "queueName": null,
+        "configurationVersion": 0,
+        "configuration": {
+          "scriptLang": "TBEL",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n    //remove prevAlarmDetails from metadata\n    delete metadata.prevAlarmDetails;\n    //now metadata is the same as it comes IN this rule node\n}\n\n\nreturn details;",
+          "alarmDetailsBuildTbel": "var details = {};\nif (metadata.prevAlarmDetails != null) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n    //remove prevAlarmDetails from metadata\n    metadata.remove('prevAlarmDetails');\n    //now metadata is the same as it comes IN this rule node\n}\n\n\nreturn details;",
+          "alarmType": "Early Warning Fire Alarm"
+        },
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 1149,
+          "layoutY": 140
+        }
+      },
+      {
+        "type": "org.thingsboard.rule.engine.action.TbCreateAlarmNode",
+        "name": "Elevated Risk Fire Alarm",
+        "debugSettings": {
+          "failuresEnabled": false,
+          "allEnabled": false,
+          "allEnabledUntil": 0
+        },
+        "singletonMode": false,
+        "queueName": null,
+        "configurationVersion": 0,
+        "configuration": {
+          "scriptLang": "TBEL",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n    //remove prevAlarmDetails from metadata\n    delete metadata.prevAlarmDetails;\n    //now metadata is the same as it comes IN this rule node\n}\n\n\nreturn details;",
+          "alarmDetailsBuildTbel": "var details = {};\nif (metadata.prevAlarmDetails != null) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n    //remove prevAlarmDetails from metadata\n    metadata.remove('prevAlarmDetails');\n    //now metadata is the same as it comes IN this rule node\n}\n\n\nreturn details;",
+          "useMessageAlarmData": false,
+          "overwriteAlarmDetails": false,
+          "alarmType": "Elevated Risk Fire Alarm",
+          "severity": "MAJOR",
+          "propagate": false,
+          "relationTypes": [],
+          "propagateToOwner": false,
+          "propagateToTenant": false,
+          "dynamicSeverity": false
+        },
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 1148,
+          "layoutY": 215
+        }
+      },
+      {
+        "type": "org.thingsboard.rule.engine.action.TbClearAlarmNode",
+        "name": "Clear Elevated Risk Fire Alarm",
+        "debugSettings": {
+          "failuresEnabled": false,
+          "allEnabled": false,
+          "allEnabledUntil": 0
+        },
+        "singletonMode": false,
+        "queueName": null,
+        "configurationVersion": 0,
+        "configuration": {
+          "scriptLang": "TBEL",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n    //remove prevAlarmDetails from metadata\n    delete metadata.prevAlarmDetails;\n    //now metadata is the same as it comes IN this rule node\n}\n\n\nreturn details;",
+          "alarmDetailsBuildTbel": "var details = {};\nif (metadata.prevAlarmDetails != null) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n    //remove prevAlarmDetails from metadata\n    metadata.remove('prevAlarmDetails');\n    //now metadata is the same as it comes IN this rule node\n}\n\n\nreturn details;",
+          "alarmType": "Elevated Risk Fire Alarm"
+        },
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 1148,
+          "layoutY": 291
+        }
+      },
+      {
+        "type": "org.thingsboard.rule.engine.action.TbCreateAlarmNode",
+        "name": "Critical Fire Alarm",
+        "debugSettings": {
+          "failuresEnabled": false,
+          "allEnabled": false,
+          "allEnabledUntil": 0
+        },
+        "singletonMode": false,
+        "queueName": null,
+        "configurationVersion": 0,
+        "configuration": {
+          "scriptLang": "TBEL",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n    //remove prevAlarmDetails from metadata\n    delete metadata.prevAlarmDetails;\n    //now metadata is the same as it comes IN this rule node\n}\n\n\nreturn details;",
+          "alarmDetailsBuildTbel": "var details = {};\nif (metadata.prevAlarmDetails != null) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n    //remove prevAlarmDetails from metadata\n    metadata.remove('prevAlarmDetails');\n    //now metadata is the same as it comes IN this rule node\n}\n\n\nreturn details;",
+          "useMessageAlarmData": false,
+          "overwriteAlarmDetails": false,
+          "alarmType": "Critical Fire Alarm",
+          "severity": "CRITICAL",
+          "propagate": false,
+          "relationTypes": [],
+          "propagateToOwner": false,
+          "propagateToTenant": false,
+          "dynamicSeverity": false
+        },
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 1148,
+          "layoutY": 362
+        }
+      },
+      {
+        "type": "org.thingsboard.rule.engine.action.TbClearAlarmNode",
+        "name": "Clear Critical Fire Alarm",
+        "debugSettings": {
+          "failuresEnabled": false,
+          "allEnabled": false,
+          "allEnabledUntil": 0
+        },
+        "singletonMode": false,
+        "queueName": null,
+        "configurationVersion": 0,
+        "configuration": {
+          "scriptLang": "TBEL",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n    //remove prevAlarmDetails from metadata\n    delete metadata.prevAlarmDetails;\n    //now metadata is the same as it comes IN this rule node\n}\n\n\nreturn details;",
+          "alarmDetailsBuildTbel": "var details = {};\nif (metadata.prevAlarmDetails != null) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n    //remove prevAlarmDetails from metadata\n    metadata.remove('prevAlarmDetails');\n    //now metadata is the same as it comes IN this rule node\n}\n\n\nreturn details;",
+          "alarmType": "Critical Fire Alarm"
+        },
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 1148,
+          "layoutY": 442
+        }
+      },
+      {
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "Set Value Dataset Fire Detection",
+        "debugSettings": {
+          "failuresEnabled": false,
+          "allEnabled": false,
+          "allEnabledUntil": 0
+        },
+        "singletonMode": false,
+        "queueName": null,
+        "configurationVersion": 0,
+        "configuration": {
+          "scriptLang": "JS",
+          "jsScript": "// Get sensor values from incoming message\r\nvar temperature = parseFloat(msg.temperature);\r\nvar humidity = parseFloat(msg.humidity);\r\nvar mq2_ppm = parseFloat(msg.mq2_ppm);\r\nvar mq7_ppm = parseFloat(msg.mq7_ppm);\r\nvar smoke_detected = msg.smoke_detected === true || msg.smoke_detected === 1 || msg.smoke_detected === \"true\";\r\n\r\n// Thresholds (from Wokwi code)\r\nvar TEMP_THRESHOLD = 40.0;\r\nvar HUMIDITY_THRESHOLD = 30.0;\r\nvar MQ2_BASELINE = 50;\r\nvar MQ7_BASELINE = 50;\r\nvar GAS_BASELINE_INCREASE = 20;\r\n\r\n// Calculate MQ thresholds\r\nvar MQ2_THRESHOLD = MQ2_BASELINE + GAS_BASELINE_INCREASE;  // 70 PPM\r\nvar MQ7_THRESHOLD = MQ7_BASELINE + GAS_BASELINE_INCREASE;  // 70 PPM\r\n\r\n// Evaluate individual fire indicators\r\nvar tempHigh = (temperature > TEMP_THRESHOLD);\r\nvar humidityLow = (humidity < HUMIDITY_THRESHOLD);\r\nvar mq2Elevated = (mq2_ppm > MQ2_THRESHOLD);\r\nvar mq7Elevated = (mq7_ppm > MQ7_THRESHOLD);\r\nvar smokePresent = smoke_detected;\r\n\r\n// Count active fire indicators\r\nvar fireIndicators = 0;\r\nif (tempHigh) fireIndicators++;\r\nif (humidityLow) fireIndicators++;\r\nif (mq2Elevated) fireIndicators++;\r\nif (mq7Elevated) fireIndicators++;\r\nif (smokePresent) fireIndicators++;\r\n\r\n// Initialize alert levels\r\nvar level1Active = false;\r\nvar level2Active = false;\r\nvar level3Active = false;\r\nvar alertLevel = 0;\r\n\r\n// Temperature rate of change calculation\r\n// Note: For dataset, we don't have historical data in the rule chain\r\n// So we'll set this to 0 or calculate from previous telemetry if needed\r\nvar tempRateChange = 0.0;\r\n\r\n// LEVEL 3: CRITICAL FIRE (Priority Check)\r\n// 4 or more indicators active\r\nif (fireIndicators >= 4) {\r\n    level3Active = true;\r\n    level2Active = true;  // Keep Level 2 active\r\n    level1Active = true;  // Keep Level 1 active\r\n    alertLevel = 3;\r\n}\r\n// LEVEL 2: ELEVATED RISK\r\n// 3 or more indicators active\r\nelse if (fireIndicators >= 3) {\r\n    level3Active = false;\r\n    level2Active = true;\r\n    level1Active = true;  // Keep Level 1 active\r\n    alertLevel = 2;\r\n}\r\n// LEVEL 1: EARLY WARNING\r\n// 2 or more indicators active\r\nelse if (fireIndicators >= 2) {\r\n    level2Active = false;\r\n    level3Active = false;\r\n    level1Active = true;\r\n    alertLevel = 1;\r\n}\r\n// LEVEL 0: NORMAL\r\nelse {\r\n    level1Active = false;\r\n    level2Active = false;\r\n    level3Active = false;\r\n    alertLevel = 0;\r\n}\r\n\r\n// Create new message with original data + calculated values\r\nvar newMsg = {};\r\n\r\n// Original sensor values\r\nnewMsg.temperature = temperature;\r\nnewMsg.humidity = humidity;\r\nnewMsg.mq2_ppm = mq2_ppm;\r\nnewMsg.mq7_ppm = mq7_ppm;\r\nnewMsg.smoke_detected = smoke_detected;\r\n\r\n// Calculated values (for dashboard)\r\nnewMsg.temp_rate_change = tempRateChange;\r\nnewMsg.fire_indicators = fireIndicators;\r\nnewMsg.alert_level = alertLevel;\r\n\r\n// Alert level flags\r\nnewMsg.level1_active = level1Active;\r\nnewMsg.level2_active = level2Active;\r\nnewMsg.level3_active = level3Active;\r\n\r\n\r\nreturn {msg: newMsg, metadata: metadata, msgType: msgType};",
+          "tbelScript": "return {msg: msg, metadata: metadata, msgType: msgType};"
+        },
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 267,
+          "layoutY": 197
+        }
+      }
+    ],
+    "connections": [
+      {
+        "fromIndex": 0,
+        "toIndex": 1,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 0,
+        "toIndex": 2,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 0,
+        "toIndex": 3,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 1,
+        "toIndex": 4,
+        "type": "True"
+      },
+      {
+        "fromIndex": 1,
+        "toIndex": 5,
+        "type": "False"
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 6,
+        "type": "True"
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 7,
+        "type": "False"
+      },
+      {
+        "fromIndex": 3,
+        "toIndex": 8,
+        "type": "True"
+      },
+      {
+        "fromIndex": 3,
+        "toIndex": 9,
+        "type": "False"
+      },
+      {
+        "fromIndex": 10,
+        "toIndex": 0,
+        "type": "Success"
+      }
+    ],
+    "ruleChainConnections": null
+  }
+}

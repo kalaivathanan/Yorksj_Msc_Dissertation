@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "author": "IoT Environmental Monitoring",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-esp32-devkit-c-v4",
+      "id": "esp",
+      "top": -62.5,
+      "left": -24.2,
+      "attrs": { "env": "wokwi" }
+    },
+    {
+      "type": "wokwi-dht22",
+      "id": "dht22",
+      "top": -162.9,
+      "left": 167.4,
+      "attrs": { "temperature": "27.8", "humidity": "25.5" }
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "pot-mq2",
+      "top": -145.3,
+      "left": -259.4,
+      "attrs": { "label": "MQ-2 Gas Sensor", "value": "20" }
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "pot-mq7",
+      "top": -145.3,
+      "left": -153.8,
+      "attrs": { "label": "MQ-7 CO Sensor", "value": "20" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn-smoke",
+      "top": 54.2,
+      "left": 297.6,
+      "attrs": { "label": "Smoke Detector" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led-level1",
+      "top": 313.2,
+      "left": -250,
+      "attrs": { "color": "green", "label": "Level 1 Warning" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led-level2",
+      "top": 313.2,
+      "left": -150,
+      "attrs": { "color": "yellow", "label": "Level 2 Elevated" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led-level3",
+      "top": 313.2,
+      "left": -50,
+      "attrs": { "color": "red", "label": "Level 3 Critical" }
+    },
+    { "type": "wokwi-buzzer", "id": "buzzer", "top": 290.4, "left": 78.6, "attrs": {} }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+    [ "esp:15", "dht22:SDA", "green", [ "h0" ] ],
+    [ "dht22:GND", "esp:GND.1", "black", [ "v0" ] ],
+    [ "dht22:VCC", "esp:3V3", "red", [ "v0" ] ],
+    [ "esp:32", "pot-mq2:SIG", "orange", [ "h0" ] ],
+    [ "pot-mq2:GND", "esp:GND.1", "black", [ "v0" ] ],
+    [ "pot-mq2:VCC", "esp:3V3", "red", [ "v220.8", "h287.5" ] ],
+    [ "esp:34", "pot-mq7:SIG", "purple", [ "h0" ] ],
+    [ "pot-mq7:GND", "esp:GND.2", "black", [ "v0" ] ],
+    [ "pot-mq7:VCC", "esp:3V3", "red", [ "v240", "h181.9" ] ],
+    [ "esp:13", "btn-smoke:2.l", "blue", [ "h0" ] ],
+    [ "btn-smoke:1.r", "esp:GND.1", "black", [ "v0" ] ],
+    [ "esp:2", "led-level1:A", "green", [ "h0" ] ],
+    [ "led-level1:C", "esp:GND.2", "black", [ "h-18.8", "v-268.7" ] ],
+    [ "esp:4", "led-level2:A", "yellow", [ "h0" ] ],
+    [ "led-level2:C", "esp:GND.2", "black", [ "h-28.4", "v-67.2", "h-0.8", "v-201.5" ] ],
+    [ "esp:5", "led-level3:A", "red", [ "h0" ] ],
+    [ "led-level3:C", "esp:GND.2", "black", [ "h-38", "v-100", "h-50", "v-150" ] ],
+    [ "esp:12", "buzzer:2", "red", [ "h0" ] ],
+    [ "buzzer:1", "esp:GND.1", "black", [ "h0" ] ]
+  ],
+  "dependencies": {}
+}

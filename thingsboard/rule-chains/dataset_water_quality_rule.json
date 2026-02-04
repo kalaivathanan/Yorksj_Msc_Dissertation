@@ -1,0 +1,275 @@
+{
+  "ruleChain": {
+    "name": "Dataset Water Quality Rule",
+    "type": "CORE",
+    "firstRuleNodeId": null,
+    "root": false,
+    "debugMode": false,
+    "configuration": null,
+    "additionalInfo": {
+      "description": "Dataset Water Quality Rule Chain"
+    }
+  },
+  "metadata": {
+    "version": 17,
+    "firstNodeIndex": 7,
+    "nodes": [
+      {
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgTimeseriesNode",
+        "name": "Dataset Water Quality Timeseries",
+        "debugSettings": {
+          "failuresEnabled": false,
+          "allEnabled": false,
+          "allEnabledUntil": 0
+        },
+        "singletonMode": false,
+        "queueName": null,
+        "configurationVersion": 1,
+        "configuration": {
+          "defaultTTL": 0,
+          "useServerTs": false,
+          "processingSettings": {
+            "type": "ON_EVERY_MESSAGE"
+          }
+        },
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 222,
+          "layoutY": 327
+        }
+      },
+      {
+        "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
+        "name": "Check Caution Alert",
+        "debugSettings": {
+          "failuresEnabled": false,
+          "allEnabled": false,
+          "allEnabledUntil": 0
+        },
+        "singletonMode": false,
+        "queueName": null,
+        "configurationVersion": 0,
+        "configuration": {
+          "scriptLang": "TBEL",
+          "jsScript": "return (msg.caution_active === true && msg.critical_active === false);",
+          "tbelScript": "return (msg.caution_active === true && msg.critical_active === false);"
+        },
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 885,
+          "layoutY": 91
+        }
+      },
+      {
+        "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
+        "name": "Check Critical Alert",
+        "debugSettings": {
+          "failuresEnabled": false,
+          "allEnabled": false,
+          "allEnabledUntil": 0
+        },
+        "singletonMode": false,
+        "queueName": null,
+        "configurationVersion": 0,
+        "configuration": {
+          "scriptLang": "TBEL",
+          "jsScript": "return (msg.critical_active === true);",
+          "tbelScript": "return (msg.critical_active === true);"
+        },
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 894,
+          "layoutY": 218
+        }
+      },
+      {
+        "type": "org.thingsboard.rule.engine.action.TbCreateAlarmNode",
+        "name": "Warning Water Alarm",
+        "debugSettings": {
+          "failuresEnabled": false,
+          "allEnabled": false,
+          "allEnabledUntil": 0
+        },
+        "singletonMode": false,
+        "queueName": null,
+        "configurationVersion": 0,
+        "configuration": {
+          "scriptLang": "TBEL",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n    //remove prevAlarmDetails from metadata\n    delete metadata.prevAlarmDetails;\n    //now metadata is the same as it comes IN this rule node\n}\n\n\nreturn details;",
+          "alarmDetailsBuildTbel": "var details = {};\nif (metadata.prevAlarmDetails != null) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n    //remove prevAlarmDetails from metadata\n    metadata.remove('prevAlarmDetails');\n    //now metadata is the same as it comes IN this rule node\n}\n\n\nreturn details;",
+          "useMessageAlarmData": false,
+          "overwriteAlarmDetails": false,
+          "alarmType": "Warning Water Alarm",
+          "severity": "WARNING",
+          "propagate": false,
+          "relationTypes": [],
+          "propagateToOwner": false,
+          "propagateToTenant": false,
+          "dynamicSeverity": false
+        },
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 1230,
+          "layoutY": 40
+        }
+      },
+      {
+        "type": "org.thingsboard.rule.engine.action.TbClearAlarmNode",
+        "name": "Clear Warning Water Alarm",
+        "debugSettings": {
+          "failuresEnabled": false,
+          "allEnabled": false,
+          "allEnabledUntil": 0
+        },
+        "singletonMode": false,
+        "queueName": null,
+        "configurationVersion": 0,
+        "configuration": {
+          "scriptLang": "TBEL",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n    //remove prevAlarmDetails from metadata\n    delete metadata.prevAlarmDetails;\n    //now metadata is the same as it comes IN this rule node\n}\n\n\nreturn details;",
+          "alarmDetailsBuildTbel": "var details = {};\nif (metadata.prevAlarmDetails != null) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n    //remove prevAlarmDetails from metadata\n    metadata.remove('prevAlarmDetails');\n    //now metadata is the same as it comes IN this rule node\n}\n\n\nreturn details;",
+          "alarmType": "Warning Water Alarm"
+        },
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 1233,
+          "layoutY": 115
+        }
+      },
+      {
+        "type": "org.thingsboard.rule.engine.action.TbCreateAlarmNode",
+        "name": "Critical Water Alarm",
+        "debugSettings": {
+          "failuresEnabled": false,
+          "allEnabled": false,
+          "allEnabledUntil": 0
+        },
+        "singletonMode": false,
+        "queueName": null,
+        "configurationVersion": 0,
+        "configuration": {
+          "scriptLang": "TBEL",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n    //remove prevAlarmDetails from metadata\n    delete metadata.prevAlarmDetails;\n    //now metadata is the same as it comes IN this rule node\n}\n\n\nreturn details;",
+          "alarmDetailsBuildTbel": "var details = {};\nif (metadata.prevAlarmDetails != null) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n    //remove prevAlarmDetails from metadata\n    metadata.remove('prevAlarmDetails');\n    //now metadata is the same as it comes IN this rule node\n}\n\n\nreturn details;",
+          "useMessageAlarmData": false,
+          "overwriteAlarmDetails": false,
+          "alarmType": "Critical Water Alarm",
+          "severity": "CRITICAL",
+          "propagate": false,
+          "relationTypes": [],
+          "propagateToOwner": false,
+          "propagateToTenant": false,
+          "dynamicSeverity": false
+        },
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 1242,
+          "layoutY": 191
+        }
+      },
+      {
+        "type": "org.thingsboard.rule.engine.action.TbClearAlarmNode",
+        "name": "Clear Critical Water Alarm",
+        "debugSettings": {
+          "failuresEnabled": false,
+          "allEnabled": false,
+          "allEnabledUntil": 0
+        },
+        "singletonMode": false,
+        "queueName": null,
+        "configurationVersion": 0,
+        "configuration": {
+          "scriptLang": "TBEL",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n    //remove prevAlarmDetails from metadata\n    delete metadata.prevAlarmDetails;\n    //now metadata is the same as it comes IN this rule node\n}\n\n\nreturn details;",
+          "alarmDetailsBuildTbel": "var details = {};\nif (metadata.prevAlarmDetails != null) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n    //remove prevAlarmDetails from metadata\n    metadata.remove('prevAlarmDetails');\n    //now metadata is the same as it comes IN this rule node\n}\n\n\nreturn details;",
+          "alarmType": "Critical Water Alarm"
+        },
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 1242,
+          "layoutY": 271
+        }
+      },
+      {
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "Set Value Dataset Water Quality",
+        "debugSettings": null,
+        "singletonMode": false,
+        "queueName": null,
+        "configurationVersion": 0,
+        "configuration": {
+          "scriptLang": "JS",
+          "jsScript": "// Get sensor values from incoming message\r\nvar pH = parseFloat(msg.pH);\r\nvar turbidity = parseFloat(msg.turbidity_ntu);\r\nvar dissolvedOxygen = parseFloat(msg.dissolved_oxygen_mg_L);\r\nvar conductivity = parseFloat(msg.conductivity_uS_cm);\r\n\r\n// Thresholds\r\nvar PH_OPTIMAL_MIN = 6.5;\r\nvar PH_OPTIMAL_MAX = 8.5;\r\nvar PH_CRITICAL_MIN = 4.0;\r\nvar PH_CRITICAL_MAX = 10.0;\r\nvar TURBIDITY_NORMAL = 5.0;\r\nvar TURBIDITY_CRITICAL = 20.0;\r\nvar DO_OPTIMAL = 7.0;\r\nvar DO_CRITICAL = 3.0;\r\nvar CONDUCTIVITY_NORMAL = 500.0;\r\nvar CONDUCTIVITY_CRITICAL = 2000.0;\r\n\r\n// Check indicators\r\nvar ph_abnormal = (pH < PH_OPTIMAL_MIN || pH > PH_OPTIMAL_MAX);\r\nvar turbidity_high = (turbidity > TURBIDITY_NORMAL);\r\nvar do_low = (dissolvedOxygen < DO_OPTIMAL);\r\nvar conductivity_high = (conductivity > CONDUCTIVITY_NORMAL);\r\n\r\n// Count active indicators\r\nvar activeIndicators = 0;\r\nif (ph_abnormal) activeIndicators++;\r\nif (turbidity_high) activeIndicators++;\r\nif (do_low) activeIndicators++;\r\nif (conductivity_high) activeIndicators++;\r\n\r\n// Initialize alerts\r\nvar cautionActive = false;\r\nvar criticalActive = false;\r\nvar alertLevel = 0;\r\n\r\n// CRITICAL LEVEL CHECK (Priority)\r\nvar criticalCondition = (\r\n    pH < PH_CRITICAL_MIN || \r\n    pH > PH_CRITICAL_MAX || \r\n    turbidity > TURBIDITY_CRITICAL || \r\n    dissolvedOxygen < DO_CRITICAL || \r\n    conductivity > CONDUCTIVITY_CRITICAL\r\n);\r\n\r\nif (criticalCondition) {\r\n    criticalActive = true;\r\n    cautionActive = true;  // Also activate caution\r\n    alertLevel = 2;\r\n}\r\n// CAUTION LEVEL CHECK\r\nelse if (activeIndicators >= 1) {\r\n    cautionActive = true;\r\n    criticalActive = false;\r\n    alertLevel = 1;\r\n} \r\n// Normal\r\nelse {\r\n    cautionActive = false;\r\n    criticalActive = false;\r\n    alertLevel = 0;\r\n}\r\n\r\n// Add calculated values to message\r\nvar newMsg = {};\r\nnewMsg.pH = pH;\r\nnewMsg.turbidity_ntu = turbidity;\r\nnewMsg.dissolved_oxygen_mg_L = dissolvedOxygen;\r\nnewMsg.conductivity_uS_cm = conductivity;\r\nnewMsg.water_temperature = parseFloat(msg.water_temperature);\r\n\r\n// Add calculated alert flags\r\nnewMsg.caution_active = cautionActive;\r\nnewMsg.critical_active = criticalActive;\r\nnewMsg.alert_level = alertLevel;\r\nnewMsg.active_indicators = activeIndicators;\r\n\r\n\r\nreturn {msg: newMsg, metadata: metadata, msgType: msgType};",
+          "tbelScript": "return {msg: msg, metadata: metadata, msgType: msgType};"
+        },
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 305,
+          "layoutY": 147
+        }
+      },
+      {
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgTimeseriesNode",
+        "name": "Dataset Water Quality Timeseries 2",
+        "debugSettings": {
+          "failuresEnabled": false,
+          "allEnabled": false,
+          "allEnabledUntil": 0
+        },
+        "singletonMode": false,
+        "queueName": null,
+        "configurationVersion": 1,
+        "configuration": {
+          "defaultTTL": 0,
+          "useServerTs": false,
+          "processingSettings": {
+            "type": "ON_EVERY_MESSAGE"
+          }
+        },
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 615,
+          "layoutY": 145
+        }
+      }
+    ],
+    "connections": [
+      {
+        "fromIndex": 1,
+        "toIndex": 3,
+        "type": "True"
+      },
+      {
+        "fromIndex": 1,
+        "toIndex": 4,
+        "type": "False"
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 5,
+        "type": "True"
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 6,
+        "type": "False"
+      },
+      {
+        "fromIndex": 7,
+        "toIndex": 8,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 8,
+        "toIndex": 1,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 8,
+        "toIndex": 2,
+        "type": "Success"
+      }
+    ],
+    "ruleChainConnections": null
+  }
+}
